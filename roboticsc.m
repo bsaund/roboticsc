@@ -14,11 +14,11 @@ function roboticsc(varargin)
 	text('position',[0.01,.5],'string','\alpha_i_-_1   a_i_-_1    d_i      \theta_i              q_i','fontsize',15,'fontangle','i')
 	axis off
 	axes(ma)
-	e1=uicontrol('sty','e','un','n','pos',[.01 .5 .225 .4],'backgroundcolor','w','max',2,'ho','l','fonts',10,'fontn','courier');
-	e5=uicontrol('sty','e','un','n','pos',[.25 .5 .05 .4],'backgroundcolor','w','max',2,'fonts',10,'fontn','courier');
+	dhParameterDisplay=uicontrol('sty','e','un','n','pos',[.01 .5 .225 .4],'backgroundcolor','w','max',2,'ho','l','fonts',10,'fontn','courier');
+	axisMotionTypeDisplay=uicontrol('sty','e','un','n','pos',[.25 .5 .05 .4],'backgroundcolor','w','max',2,'fonts',10,'fontn','courier');
 	
-	uicontrol('sty','pu','callback',@pp,'string','Go','backgroundcolor','w')
-	lxf=uicontrol('sty','li','string',{'Null';'Planar';'Puma 560';'Complete';'Piper''s 1st';'Yasukawa L-3';'Stanford';'IRB1400';'DIESTRO';'DLR'},'callback',@dl,'un','n','pos',[.7 .05 .2 .1],'backgroundcolor','w');
+	uicontrol('sty','pu','callback',@reloadRobot,'string','Go','backgroundcolor','w')
+	robotSelector=uicontrol('sty','li','string',{'Null';'Planar';'Puma 560';'Complete';'Piper''s 1st';'Yasukawa L-3';'Stanford';'IRB1400';'DIESTRO';'DLR'},'callback',@setRobotDimensions,'un','n','pos',[.7 .05 .2 .1],'backgroundcolor','w');
 	
 	function T=trans(al,a,d,t)
 		
@@ -29,39 +29,39 @@ function roboticsc(varargin)
 		
 	end
 	
-	function dl(varargin)
+	function setRobotDimensions(varargin)
 		set(dumd,'string','0')
-		switch get(lxf,'value')
+		switch get(robotSelector,'value')
 			case 1
-				set([e5,e1],'string','','sty','e')
+				set([axisMotionTypeDisplay,dhParameterDisplay],'string','','sty','e')
 			case 2
-				set(e1,'string',strvcat('0 2 0 0','0 2 0 0','0 2 0 0')) %#ok<*VCAT>
-				set(e5,'string',['t';'d';'t'])
+				set(dhParameterDisplay,'string',strvcat('0 2 0 0','0 2 0 0','0 2 0 0')) %#ok<*VCAT>
+				set(axisMotionTypeDisplay,'string',['t';'d';'t'])
 			case 3
-				set(e1,'sty','e')
-				set(e1,'str',strvcat('0 0 0 0','-pi/2 0 0 0','0 3 1 0','-pi/2 1 2 0','pi/2 0 0 0','-pi/2 0 0 0'))
-				set(e5,'string',['t';'t';'t';'t';'t';'t'])
+				set(dhParameterDisplay,'sty','e')
+				set(dhParameterDisplay,'str',strvcat('0 0 0 0','-pi/2 0 0 0','0 3 1 0','-pi/2 1 2 0','pi/2 0 0 0','-pi/2 0 0 0'))
+				set(axisMotionTypeDisplay,'string',['t';'t';'t';'t';'t';'t'])
 			case 4
-				set(e1,'sty','e')
-				set(e1,'str',strvcat('0 0 3 0','-pi/2 0 3 pi/2','pi/2 0 3 0'))
-				set(e5,'string',['d';'d';'d'])
+				set(dhParameterDisplay,'sty','e')
+				set(dhParameterDisplay,'str',strvcat('0 0 3 0','-pi/2 0 3 pi/2','pi/2 0 3 0'))
+				set(axisMotionTypeDisplay,'string',['d';'d';'d'])
 			case 5
-				set(e1,'sty','e')
-				set(e5,'string',['t';'t';'t';'t';'t';'t'])
-				set(e1,'str',strvcat('0 0 0 0','pi/2 0 2 0','-pi/2 2 2 0','pi/2 2 2 0','-pi/2 0 0 0','pi/2 0 0 0'))
+				set(dhParameterDisplay,'sty','e')
+				set(axisMotionTypeDisplay,'string',['t';'t';'t';'t';'t';'t'])
+				set(dhParameterDisplay,'str',strvcat('0 0 0 0','pi/2 0 2 0','-pi/2 2 2 0','pi/2 2 2 0','-pi/2 0 0 0','pi/2 0 0 0'))
 			case 6
-				set(e1,'sty','e')
-				set(e5,'string',['t';'t';'t';'t';'t'])
-				set(e1,'str',strvcat('0 0 0 0','-pi/2 0 0 0','0 3 0 0','0 4 0 0','pi/2 0 0 0'))
+				set(dhParameterDisplay,'sty','e')
+				set(axisMotionTypeDisplay,'string',['t';'t';'t';'t';'t'])
+				set(dhParameterDisplay,'str',strvcat('0 0 0 0','-pi/2 0 0 0','0 3 0 0','0 4 0 0','pi/2 0 0 0'))
 			case 7
-				set(e1,'sty','e')
-				set(e5,'string',['t';'t';'d';'t';'t';'t'])
-				set(e1,'str',strvcat('0 0 0 0','-pi/2 0 4 0','pi/2 0 3 0','0 0 0 0','-pi/2 0 0 0',...
+				set(dhParameterDisplay,'sty','e')
+				set(axisMotionTypeDisplay,'string',['t';'t';'d';'t';'t';'t'])
+				set(dhParameterDisplay,'str',strvcat('0 0 0 0','-pi/2 0 4 0','pi/2 0 3 0','0 0 0 0','-pi/2 0 0 0',...
 					'pi/2 0 2 0'))
 			case 8
-				set(e1,'sty','e')
-				set(e5,'string',['t';'t';'t';'t';'t';'d'])
-				set(e1,'str',num2str([      0           0        4.75           0
+				set(dhParameterDisplay,'sty','e')
+				set(axisMotionTypeDisplay,'string',['t';'t';'t';'t';'t';'d'])
+				set(dhParameterDisplay,'str',num2str([      0           0        4.75           0
 					1.5708         1.5           0      1.5708
 					0           6           0           0
 					1.5708         1.2         7.2           0
@@ -75,8 +75,8 @@ function roboticsc(varargin)
 					-1.5708           5           5      1.2766
 					1.5708           5           5      1.2766];
 				sdgsdg(:,end) = zeros(6,1);
-				set(e1,'sty','e','str',num2str(sdgsdg))
-				set(e5,'string',['t';'t';'t';'t';'t';'t'])
+				set(dhParameterDisplay,'sty','e','str',num2str(sdgsdg))
+				set(axisMotionTypeDisplay,'string',['t';'t';'t';'t';'t';'t'])
 				
 			case 10
 				sdgsdg=[       1.5708            0            0            0
@@ -88,100 +88,99 @@ function roboticsc(varargin)
 					1.5708            0            4            0
 					];
 				sdgsdg(:,end) = rand(7,1);
-				set(e1,'sty','e','str',num2str(sdgsdg))
-				set(e5,'string',['t';'t';'t';'t';'t';'t';'t'])
+				set(dhParameterDisplay,'sty','e','str',num2str(sdgsdg))
+				set(axisMotionTypeDisplay,'string',['t';'t';'t';'t';'t';'t';'t'])
 				
 				
 		end
 	end
 	
-	function pp(varargin)
+	function reloadRobot(varargin)
 		
 		cla
 		plot3(0,0,0,'r*')
 		set(dumd,'string','0');
 		
-		DH=str2num(get(e1,'string'));
+		DH=str2num(get(dhParameterDisplay,'string'));
 		
 		al=DH(:,1);
 		a=DH(:,2);
 		d=DH(:,3);
 		t=DH(:,4);
 		
-		w=get(e5,'string');
+		axisType=get(axisMotionTypeDisplay,'string');
 		delete(findobj('type','uicontrol','style','slider'));
 		delete(findobj('type','uicontrol','style','text'));
 		tts=uicontrol('sty','te','backgroundcolor','w','un','n','pos',[.7 0 .2 .05],'string','','fontsize',15);
 		
+        %Set up axis postion sliders
 		for k=1:length(a)
-			if strcmp(w(k),'t')
-				eval(['uicontrol(''style'',''slider'',''units'',''norm'',''pos'',[.1 ',num2str(k*.1/2),' .1 .05 ],''callback'',@slm,''min'',-2*pi-.1,''max'',2*pi+.1,''value'',',...
-					num2str(t(k)),')'])
-				eval(['uicontrol(''style'',''text'',''fontsize'',14,''fontname'',''calibri'',''fontangle'',''italic'',''units'',''norm'',''backgroundcolor'',''w'',''pos'',[.2 ',num2str(k*.1/2),' .05 .05 ],''string'',',...
-					'[''t',num2str(k),'''])'])
-			else
-				eval(['uicontrol(''style'',''slider'',''units'',''norm'',''pos'',[.1 ',num2str(k*.1/2),' .1 .05 ],''callback'',@slm,''min'',-50,''max'',50,''value'',',...
-					num2str(d(k)),',''sliderstep'',[.001 .05])'])
-				eval(['uicontrol(''style'',''text'',''fontname'',''calibri'',''fontsize'',14,''fontangle'',''italic'',''units'',''norm'',''backgroundcolor'',''w'',''pos'',[.2 ',num2str(k*.1/2),' .05 .05 ],''string'',',...
-					'[''d',num2str(k),'''])'])
-			end
-		end
+            if strcmp(axisType(k),'t') %Rotational Axis
+                uicontrol('style','slider','units','norm','pos',[.1 k*.1/2 .1, .05], 'callback',@slm,'min',-2*pi-.1,'max',2*pi + .1,'value',t(k));
+            else   %Linear motion
+                uicontrol('style','slider','units','norm','pos',[.1 k*.1/2 .1, .05], 'callback',@slm,'min',-50,'max',50,'value',t(k), 'sliderstep',[.001, .05]);
+            end
+            uicontrol('style','text', 'fontsize',14,'fontname','calibri','fontangle','italic','units','norm','backgroundcolor','w','pos',[.2, k*.05 .05 .05], 'string',[axisType(k), num2str(k)]);
+        end
 		
+        
+        %Set up kinematics
 		T=cell(length(a),1);
 		f=1;
 		for k=1:length(a)
 			T{k}=trans(al(k),a(k),d(k),t(k));
 			f=f*T{k};
 		end
-		set(e1,'style','li')
+		set(dhParameterDisplay,'style','li')
 		
+        %Remake DH paramter setting UI
 		delete(findobj('type','uicontrol','style','pus','string','Set'));
 		delete(findobj('type','uicontrol','style','edit','pos',[.025 .4 .2 .025]));
-		ep=uicontrol('sty','ed','un','n','pos',[.025 .4 .2 .025],'backgroundcolor','w');
-		uicontrol('sty','pu','un','n','pos',[.025 .425 .05 .025],'string','Set','callback',@chl,'backgroundcolor','w');
-		set(e1,'value',1,'callback',@leq)
+		manualDhParameters=uicontrol('sty','ed','un','n','pos',[.025 .4 .2 .025],'backgroundcolor','w');
+		uicontrol('sty','pu','un','n','pos',[.025 .425 .05 .025],'string','Set','callback',@changeDhParameters,'backgroundcolor','w');
+		set(dhParameterDisplay,'value',1,'callback',@updateSetDhParametersDisplay)
 		
 		ss5=abs(sum([d;a]));
 		slm(ss5)
-		leq
+		updateSetDhParametersDisplay
 		
-		function leq(varargin)
-			ss=get(e1,'string');
-			vv=get(e1,'value');
-			sv=ss(vv,:);
-			set(ep,'string',sv)
+		function updateSetDhParametersDisplay(varargin)
+			allDhParameters=get(dhParameterDisplay,'string');
+			selectedRow=get(dhParameterDisplay,'value');
+			selectedDhParameters=allDhParameters(selectedRow,:);
+			set(manualDhParameters,'string',selectedDhParameters)
 		end
 		
-		function chl(varargin)
+		function changeDhParameters(varargin)
 			set(dumd,'string','0');
-			val=str2num(get(ep,'string'));
-			ss=get(e1,'string');
-			vv=get(e1,'value');
+			val=str2num(get(manualDhParameters,'string'));
+			ss=get(dhParameterDisplay,'string');
+			vv=get(dhParameterDisplay,'value');
 			
 			ss=str2num(ss);
 			ss(vv,:)=val;
-			set(e1,'string',num2str(ss))
-			pp;
+			set(dhParameterDisplay,'string',num2str(ss))
+			reloadRobot;
 		end
 	end
 	
 	function slm(varargin)
 		axis on
-		set(e1,'value',1)
+		set(dhParameterDisplay,'value',1)
 		
 		ll=flipud(findobj('type','uicontrol','style','slider'));
 		cla;
 		hold on
 		plot3(0,0,0,'r*')
 		
-		DH=(str2num(get(e1,'string'))); %#ok<*ST2NM>
+		DH=(str2num(get(dhParameterDisplay,'string'))); %#ok<*ST2NM>
 		
 		al=DH(:,1);
 		a=DH(:,2);
 		d=DH(:,3);
 		t=DH(:,4);
 		
-		w=get(e5,'string');
+		w=get(axisMotionTypeDisplay,'string');
 		n=length(a);
 		
 		for k=1:length(a)
@@ -193,7 +192,7 @@ function roboticsc(varargin)
 		end
 		
 		FFF=num2str([al,a,d,t],5);
-		set(e1,'string',FFF)
+		set(dhParameterDisplay,'string',FFF)
 		T=cell(length(a),1);
 		f=1;
 		for k=1:length(a)
@@ -251,7 +250,7 @@ function roboticsc(varargin)
 		function [pv,g]=plotorg(T,varargin)
 			
 			nuk = T(end);
-			w=get(e5,'string');
+			w=get(axisMotionTypeDisplay,'string');
 			
 			res=10;
 			R=T(1:3,1:3);
@@ -292,7 +291,7 @@ function roboticsc(varargin)
 			pv=T(1:3,5);
 			if T(4,5)==0
 				set([ly,lx,lz],'color','k','linestyle','-','linewidth',1)
-% 				delete(pp1)
+				delete(pp1)
 				return
 			end
 			
